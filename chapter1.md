@@ -5,23 +5,22 @@ attachments :
   slides_link : https://s3.amazonaws.com/assets.datacamp.com/course/teach/slides_example.pdf
 
 ---
-## A really bad movie
+## Recap of last session
 
 ```yaml
-type: MultipleChoiceExercise
+type: NormalExercise
 lang: r
 xp: 50
 skills: 1
 key: 20613ec5b8
 ```
-
-Have a look at the plot that showed up in the viewer to the right. Which type of movie has the worst rating assigned to it?
+100 men and 100 women agreed to have their brain volume as well as their body weight measured. We put the resulting data into variable `my.data` in your R workspace. `my.data` is of type `data frame` (see Chapter 5 of course "Introduction to R")
 
 `@instructions`
-- Adventure
-- Action
-- Animation
-- Comedy
+ Use `summary()` on `my.data` to have a look at its structure.
+Calculate the mean ($\mu$) of brain volume in the my.data dataframe.
+Use `aggregate()` to calculate the mean for each gender.
+Do the same for the standard deviation ($\sigma$).
 
 `@hint`
 Have a look at the plot. Which color does the point with the lowest rating have?
@@ -30,25 +29,54 @@ Have a look at the plot. Which color does the point with the lowest rating have?
 ```{r}
 # The pre exercise code runs code to initialize the user's workspace.
 # You can use it to load packages, initialize datasets and draw a plot in the viewer
+library(tidyr)
+library(dplyr)
+n<-100
+set.seed(123)
+my.data<-data.frame(gender=c(rep("male",n),rep("female",n)), brain=c(rnorm(n,1273,100),rnorm(n,1131,100)))
+my.data <-
+  my.data %>% 
+  mutate(body=brain+25+rnorm(n*2,0,100))
+```
+`@sample_code`
+```{r}
+# summary(my.data)
 
-movies <- read.csv("http://s3.amazonaws.com/assets.datacamp.com/course/introduction_to_r/movies.csv")
 
-library(ggplot2)
+#average brain
 
-ggplot(movies, aes(x = runtime, y = rating, col = genre)) + geom_point()
+
+#aggregate over gender and calculate the brain volume
+
+
+#aggregate over gender and calculate the standard deviation
+
+```
+
+`@solution`
+```{r}
+# summary(my.data)
+summary(my.data)
+
+#average brain
+mean(my.data$brain)
+
+#aggregate over gender and calculate the brain volume
+aggregate(my.data$brain,list(my.data$gender),mean)
+
+#aggregate over gender and calculate the standard deviation
+aggregate(my.data$brain,list(my.data$gender),sd)
 ```
 
 `@sct`
 ```{r}
 # SCT written with testwhat: https://github.com/datacamp/testwhat/wiki
 
-msg_bad <- "That is not correct!"
-msg_success <- "Exactly! There seems to be a very bad action movie in the dataset."
-test_mc(correct = 2, feedback_msgs = c(msg_bad, msg_success, msg_bad, msg_bad))
+success_msg("Good work!")
 ```
 
 ---
-## More movies
+## Barplot
 
 ```yaml
 type: NormalExercise
@@ -58,14 +86,11 @@ skills: 1
 key: 7aec81280b
 ```
 
-In the previous exercise, you saw a dataset about movies. In this exercise, we'll have a look at yet another dataset about movies!
-
-A dataset with a selection of movies, `movie_selection`, is available in the workspace.
+We created a new dataframe (`p.bar.data`) that contains the mean and its standard error ($\frac{\sigma}{\sqrt{N}}$) for the brain volume of each gender.
 
 `@instructions`
-- Check out the structure of `movie_selection`.
-- Select movies with a rating of 5 or higher. Assign the result to `good_movies`.
-- Use `plot()` to  plot `good_movies$Run` on the x-axis, `good_movies$Rating` on the y-axis and set `col` to `good_movies$Genre`.
+1. Make a simple bar plot and assign it to variable `p.bar`
+2. Add error bars to the bar plot.
 
 `@hint`
 - Use `str()` for the first instruction.
@@ -74,40 +99,31 @@ A dataset with a selection of movies, `movie_selection`, is available in the wor
 
 `@pre_exercise_code`
 ```{r}
-# You can also prepare your dataset in a specific way in the pre exercise code
-load(url("https://s3.amazonaws.com/assets.datacamp.com/course/teach/movies.RData"))
-movie_selection <- Movies[Movies$Genre %in% c("action", "animated", "comedy"), c("Genre", "Rating", "Run")]
-
-# Clean up the environment
-rm(Movies)
+# The pre exercise code runs code to initialize the user's workspace.
+# You can use it to load packages, initialize datasets and draw a plot in the viewer
+library(tidyr)
+library(dplyr)
+n<-100
+set.seed(123)
+my.data<-data.frame(gender=c(rep("male",n),rep("female",n)), brain=c(rnorm(n,1273,100),rnorm(n,1131,100)))
+my.data <-
+  my.data %>% 
+  mutate(body=brain+25+rnorm(n*2,0,100))
+p.bar.data<-
+  my.data %>% 
+  group_by(gender) %>% 
+  summarise(N=n(),
+  		 mean_brain=mean(brain),         
+         sem_brain=sd(brain)/sqrt(N)) %>% 
+  mutate(ymin=mean_brain-sem_brain,ymax=mean_brain+sem_brain)
 ```
 
 `@sample_code`
 ```{r}
-# movie_selection is available in your workspace
-
-# Check out the structure of movie_selection
-
-
-# Select movies that have a rating of 5 or higher: good_movies
-
-
-# Plot Run (i.e. run time) on the x axis, Rating on the y axis, and set the color using Genre
-
 ```
 
 `@solution`
 ```{r}
-# movie_selection is available in your workspace
-
-# Check out the structure of movie_selection
-str(movie_selection)
-
-# Select movies that have a rating of 5 or higher: good_movies
-good_movies <- movie_selection[movie_selection$Rating >= 5, ]
-
-# Plot Run (i.e. run time) on the x axis, Rating on the y axis, and set the color using Genre
-plot(good_movies$Run, good_movies$Rating, col = good_movies$Genre)
 ```
 
 `@sct`
