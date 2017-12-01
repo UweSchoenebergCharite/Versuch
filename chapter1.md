@@ -17,9 +17,9 @@ key: 304c453ac8
 100 men and 100 women agreed to have their brain volume as well as their body weight measured. We put the resulting data into variable `my.data` in your R workspace. `my.data` is of type `data frame` (see Chapter 5 of course "Introduction to R")
 
 `@instructions`
-- Use `summary()` on `my.data` to have a look at its structure.
+- Use [`summary()`](https://www.rdocumentation.org/packages/base/versions/3.4.3/topics/summary) on `my.data` to have a look at its structure.
 - Calculate the mean ($\mu$) of brain volume in the my.data dataframe.
-- Use `aggregate()` to calculate the mean for each gender.
+- Use [`aggregate()`](https://www.rdocumentation.org/packages/stats/versions/3.4.3/topics/aggregate) to calculate the mean for each gender.
 - Do the same for the standard deviation ($\sigma$).
 
 `@hint`
@@ -170,9 +170,9 @@ We already introduced you to central tendency measures of a distribution (mean (
 
 A normal distribution is symmetrical, i.e. $Mean = Median$. Whenever a distribution is not symmetrical: $Mean\neq Median$.
 
-You can find additional, more in depth material about mean, variance, and skew of a distribution 
-[here](https://www.youtube.com/watch?v=fv5QB3eK7jA) and 
-[here](https://www.youtube.com/watch?v=HnMGKsupF8Q). 
+You can find additional, more in depth material about mean, variance, and skew of a distribution at
+[Moments of Distributions](https://www.youtube.com/watch?v=fv5QB3eK7jA) and 
+[Normal Distributions, Standard Deviations, Modality, Skewness and Kurtosis: Understanding concepts](https://www.youtube.com/watch?v=HnMGKsupF8Q). 
 
 `@instructions`
 The two commands provided in your workspace will each plot a probability density function (PDF). The red line represents $\mu$, the blue dashed line represents the median, repectively.
@@ -237,10 +237,10 @@ skills: 1
 ```
 
 As seen in the previous exercise, some distributions may be skewed. This may also be true for data you collected. Therefore, it is a good idea to visualize your data by using plots that include spread (dispersion) and skew.
-One example in R is the function `boxplot()`. 
+One example in R is the function [`boxplot()`](https://www.rdocumentation.org/packages/graphics/versions/3.4.3/topics/boxplot). 
 
 A boxplot displays more information than a barplot: 
-- A box describes the inter quartile range `IQR` of a distribution. 50% of the data points lie within the box. The bottom of the box lies at 25% (first quartile), the top at 75% (third quartile) of the data.
+- A box describes the inter quartile range (`IQR`) of a distribution. 50% of the data points lie within the box. The bottom of the box lies at 25% (first quartile), the top at 75% (third quartile) of the data.
 
 - The line in the center of the box represents the median, i.e. 50% of the data points lie above this value and 50% lie below this value. If this line is shifted off center, the data is skewed, i.e $Mean\neq Median$.
 
@@ -248,70 +248,7 @@ A boxplot displays more information than a barplot:
 
 - Data points outside the box are called outliers.
 
-See [here](http://www.physics.csbsju.edu/stats/box2.html) for further details on the layout of boxplots.
-
-`@instructions`
-Execute the code on the right to view a boxplot. Outliers are depicted by dots.
-
-
-`@hint`
-Have a look at the plot. Which color does the point with the lowest rating have?
-
-`@pre_exercise_code`
-```{r}
-library(tidyr)
-library(dplyr)
-library(ggplot2)
-n<-100
-set.seed(123)
-my.data<-data.frame(gender=c(rep("male",n),rep("female",n)), brain=c(rnorm(n,1273,100),rnorm(n,1131,100)))
-my.data <-
-  my.data %>% 
-  mutate(body=brain+25+rnorm(n*2,0,100))
-```
-
-`@sample_code`
-```{r}
-p.box<-ggplot(aes(y=brain,x=gender),data=my.data)+
-    geom_boxplot()
-plot(p.box)
-```
-
-`@solution`
-```{r}
-p.box<-ggplot(aes(y=brain,x=gender),data=my.data)+
-    geom_boxplot()
-plot(p.box)
-```
-
-`@sct`
-```{r}
-success_msg("Well done!")
-```
----
-## Boxplot
-
-```yaml
-type: NormalExercise
-key: dbfd6a43f8
-lang: r
-xp: 100
-skills: 1
-```
-
-As seen in the previous exercise, some distributions may be skewed. This may also be true for data you collected. Therefore, it is a good idea to visualize your data by using plots that include spread (dispersion) and skew.
-One example in R is the function `boxplot()`. 
-
-A boxplot displays more information than a barplot: 
-- A box describes the inter quartile range `IQR` of a distribution. 50% of the data points lie within the box. The bottom of the box lies at 25% (first quartile), the top at 75% (third quartile) of the data.
-
-- The line in the center of the box represents the median, i.e. 50% of the data points lie above this value and 50% lie below this value. If this line is shifted off center, the data is skewed, i.e $Mean\neq Median$.
-
-- The whiskers (small lines protruding from the box) have an intervall of `1.5*IQR` on each side of the box.
-
-- Data points outside the box are called outliers.
-
-See [here](http://www.physics.csbsju.edu/stats/box2.html) for further details on the layout of boxplots.
+See [Box Plot: Display of Distribution](http://www.physics.csbsju.edu/stats/box2.html) for further details on the layout of boxplots.
 
 `@instructions`
 Execute the code on the right to view a boxplot. Outliers are depicted by dots.
@@ -363,7 +300,7 @@ skills: 1
 ```
 Overlaying a boxplot with the individual data points leads to a better understanding of the boxplot.
 
-Here, we will add a `geom_jitter()`, which creates a scatterplots of your data.
+Here, we will add a [`geom_jitter()`](https://www.rdocumentation.org/packages/ggplot2/versions/2.2.1/topics/geom_jitter), which creates a scatterplot of your data.
 
 `@instructions`
 Execute the code on the right to view a boxplot. Outliers are depicted by dots.
@@ -417,14 +354,14 @@ lang: r
 xp: 100
 skills: 1
 ```
-library `ggplot2` offers excellent plotting capabilities that allow for a wide range of customisation. Function `aes()`, e.g, describes how  data are mapped to visual properties (aesthetics) of geometric objects (geoms).
+library `ggplot2` offers excellent plotting capabilities that allow for a wide range of customisation. Function [`aes()`](https://www.rdocumentation.org/packages/ggplot2/versions/2.2.1/topics/aes), e.g, describes how  data are mapped to visual properties (aesthetics) of geometric objects (geoms).
 
-Let's add some colour to the plot. For convenience, the plot commands can be assigned to a variable. We will use `p.box`. Overlays can be generated by adding several plot commands using `+`. To actually see the plot use  `plot()` or just type in the name od the variable an execute.
+Let's add some colour to the plot. For convenience, the plot commands can be assigned to a variable. We will use `p.box`. Overlays can be generated by adding several plot commands using `+`. To actually see the plot use  [`plot()`](https://www.rdocumentation.org/packages/graphics/versions/3.4.3/topics/plot) or just type in the name or the variable an execute.
 
 `@instructions`
 - The first line of code will create a  boxplot with fill colours defined by gender
 - Change the two colours look out for obvious stereotypes and do not use them! Why not use "pink" and "light blue"?
-- Add a theme to remove a lot of clutter. One theme provided by R is `theme_classic()`
+- Add a theme to remove a lot of clutter. One theme provided by R is `theme_classic()`. See [`ggtheme`] (https://www.rdocumentation.org/packages/ggplot2/versions/2.2.1/topics/ggtheme) for more information.
 - Remove the legend by setting the legend.position to "none"
 
 `@hint`
